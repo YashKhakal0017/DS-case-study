@@ -1,1 +1,110 @@
+"""
+Simple Calendar Scheduler using a Greedy Strategy
+Strategy: Activity Selection (choose the event that finishes earliest)
+Run: python google_calendar_greedy.py
+
+This is a learning demo, not connected to Google Calendar.
+"""
+
+events = [
+    {"title": "DS Lecture", "start": 9.00, "end": 10.00},
+    {"title": "Python Practice", "start": 10.00, "end": 11.00},
+    {"title": "Project Meeting", "start": 9.30, "end": 10.30},
+    {"title": "Lunch Break", "start": 12.00, "end": 13.00},
+    {"title": "Database Lab", "start": 11.00, "end": 12.00},
+    {"title": "Team Discussion", "start": 10.30, "end": 11.30},
+    {"title": "Revision", "start": 13.00, "end": 14.00},
+]
+
+
+def format_time(value):
+    """Convert a decimal-hour value (e.g. 9.5) to HH:MM."""
+    hour = int(value)
+    minutes = round((value - hour) * 60)
+    if minutes == 60:
+        hour += 1
+        minutes = 0
+    return f"{hour:02d}:{minutes:02d}"
+
+
+def select_non_overlapping_events(event_list):
+    """
+    Greedy activity-selection algorithm.
+    Sort by finishing time and select each event that starts at or after
+    the end of the previously selected event.
+    """
+    sorted_events = sorted(event_list, key=lambda event: (event["end"], event["start"]))
+    selected = []
+    last_end = float("-inf")
+
+    for event in sorted_events:
+        if event["start"] >= last_end:
+            selected.append(event)
+            last_end = event["end"]
+
+    return selected
+
+
+def display_events(event_list, heading):
+    print(f"\n{heading}")
+    if not event_list:
+        print("No events.")
+        return
+
+    for event in sorted(event_list, key=lambda item: item["start"]):
+        print(
+            f"{format_time(event['start'])}-{format_time(event['end'])}  "
+            f"{event['title']}"
+        )
+
+
+def add_event(event_list):
+    title = input("Event title: ").strip()
+    try:
+        start = float(input("Start time (24-hour decimal, e.g. 9 or 13.5): "))
+        end = float(input("End time (e.g. 10 or 14.5): "))
+    except ValueError:
+        print("Please enter times as numbers, such as 9, 10, or 13.5.")
+        return
+
+    if not title:
+        print("Event title cannot be empty.")
+    elif not (0 <= start < 24 and 0 < end <= 24 and start < end):
+        print("Invalid time. Use start < end and times within 0-24.")
+    else:
+        event_list.append({"title": title, "start": start, "end": end})
+        print("Event added.")
+
+
+def main():
+    calendar_events = [event.copy() for event in events]
+
+    while True:
+        print("\nGOOGLE CALENDAR-STYLE SCHEDULER")
+        print("1. View all events")
+        print("2. Add an event")
+        print("3. Suggest a non-overlapping schedule (Greedy)")
+        print("4. Exit")
+        choice = input("Choose an option (1-4): ").strip()
+
+        if choice == "1":
+            display_events(calendar_events, "All calendar events:")
+        elif choice == "2":
+            add_event(calendar_events)
+        elif choice == "3":
+            selected = select_non_overlapping_events(calendar_events)
+            display_events(selected, "Suggested schedule (maximum number of compatible events):")
+            print(
+                "\nGreedy rule: consider events in increasing order of end time. "
+                "Choose an event if it does not overlap the last selected event."
+            )
+        elif choice == "4":
+            print("Goodbye!")
+            break
+        else:
+            print("Invalid choice. Enter a number from 1 to 4.")
+
+
+if __name__ == "__main__":
+    main()
 
