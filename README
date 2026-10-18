@@ -1,1 +1,73 @@
+# Data Structures Case Study
+
+This repository contains two Python programs demonstrating algorithm design strategies.
+
+## 1. E-commerce Product Sorting — Divide and Conquer
+
+**File:** `ecommerce_product_sorting.py`
+
+The program uses **Merge Sort** to sort a small product catalogue by:
+- Price: low to high
+- Price: high to low
+- Rating: high to low
+- Product name: A to Z
+
+### How Divide and Conquer is used
+1. **Divide:** split the product list into two halves.
+2. **Conquer:** recursively sort each half.
+3. **Combine:** merge the two sorted halves.
+
+**Time complexity:** `O(n log n)` in the best, average, and worst cases.  
+**Auxiliary space:** `O(n)` for the merge operation.
+
+## 2. Calendar Scheduling — Greedy Strategy
+
+**File:** `google_calendar_greedy.py`
+
+This is a console-based calendar scheduler inspired by Google Calendar. It lets users view events, add events, and generate a schedule with non-overlapping events.
+
+The greedy activity-selection algorithm:
+1. Sorts events by finishing time.
+2. Selects the event that finishes earliest.
+3. Selects the next event only if it starts at or after the previous selected event ends.
+
+For the classic activity-selection problem, this strategy maximizes the **number of non-overlapping events**, assuming each event has equal value.
+
+**Time complexity:** `O(n log n)` due to sorting, followed by an `O(n)` scan.  
+**Auxiliary space:** `O(n)` for the sorted/selected lists.
+
+> Note: This is an educational console application. It does not sign in to, sync with, or modify a real Google Calendar account. Event times are entered as decimal hours (for example, `13.5` means 13:30).
+
+## Requirements
+
+- Python 3.9 or later
+- No third-party libraries required
+
+## Run the programs
+
+Open a terminal in this folder and run:
+
+```bash
+python ecommerce_product_sorting.py
+```
+
+In another run, start the calendar scheduler:
+
+```bash
+python google_calendar_greedy.py
+```
+
+On some Windows installations, use `py` instead of `python`.
+
+## Suggested GitHub repository description
+
+**DS Case Study: E-commerce product sorting using Divide and Conquer (Merge Sort) and calendar event scheduling using a Greedy activity-selection algorithm. Implemented in Python.**
+
+## Possible future improvements
+
+- Read products and events from CSV or JSON files.
+- Add unit tests.
+- Add a graphical interface.
+- Add event deletion and editing.
+- For a real calendar integration, use the official Google Calendar API and OAuth authentication.
 
